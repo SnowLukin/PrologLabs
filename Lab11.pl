@@ -48,22 +48,24 @@ parent(X,Z), parent(Z,Y), woman(Y), man(X) |
 parent(Y,Z), parent(Z,X), woman(X), man(Y).
 
 %11.15
-maxUp(X, X):- X < 10, !.
-maxUp(X, Max):-
+maxRecUp(X, X):- X < 10, !.
+maxRecUp(X, Max):-
    Xdiv is X div 10,
    Xmod is X mod 10,
-   maxUp(Xdiv, MaxF),
-   (Xmod < MaxF, Max is MaxF; Max is Xmod).
+   maxRecUp(Xdiv, NewMax),
+   (Xmod < NewMax, Max is NewMax; Max is Xmod).
 
 
 %11.16
-maxDown(X, Max):- maxDown(X, 0, Max).
-maxDown(0, Max, Max):- !.
-maxDown(X, C, Max):-
+maxRecDown(X, Max):- maxRecDown(X, 0, Max).
+maxRecDown(0, Max, Max):- !.
+maxRecDown(X, C, Max):-
     X1 is X div 10,
     D1 is X mod 10,
     D1 > C,
     !,
-    maxDown(X1, D1, Max);
+    maxRecDown(X1, D1, Max);
     X2 is X div 10,
-    maxDown(X2, C, Max).
+    maxRecDown(X2, C, Max).
+
+
