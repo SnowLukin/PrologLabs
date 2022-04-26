@@ -41,3 +41,8 @@ sister(X):- sister(Y,X), woman(Y), write(Y), nl.
 %11.13
 grandson(X,Y):- parent(Z,X), parent(Y,Z), man(X).
 grandsons(X):- grandson(Y,X),write(Y), nl.
+
+%11.14
+grandpa_daughter(X,Y):-
+parent(X,Z), parent(Z,Y), woman(Y), man(X) |
+parent(Y,Z), parent(Z,X), woman(X), man(Y).
