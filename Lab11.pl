@@ -37,3 +37,7 @@ son(X):- parent(X,Y), man(Y), write(Y), nl.
 %11.12
 sister(X,Y):- parent(Z,X), parent(Z,Y), woman(X).
 sister(X):- sister(Y,X), woman(Y), write(Y), nl.
+
+%11.13
+grandson(X,Y):- parent(Z,X), parent(Y,Z), man(X).
+grandsons(X):- grandson(Y,X),write(Y), nl.
