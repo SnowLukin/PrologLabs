@@ -68,4 +68,14 @@ maxRecDown(X, C, Max):-
     X2 is X div 10,
     maxRecDown(X2, C, Max).
 
-
+% 11.17
+% getSumOfDigitsMod3(329,Y).  -> Y = 12
+getSumOfDigitsMod3(X,Y):-
+    X < 10,
+    Remainder is X mod 3,
+    (0 is Remainder, Y is X ; Y is 0).
+getSumOfDigitsMod3(X,Y):-
+    Div is X div 10,
+    Mod is X mod 10,
+    Remainder is Mod mod 3,
+    (0 is Remainder, trySmth(Div, C), Y is Mod + C ; trySmth(Div, Y)).
