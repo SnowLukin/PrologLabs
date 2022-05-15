@@ -80,3 +80,16 @@ getSumOfDigitsMod3Up(X,Y):-
     Remainder is Mod mod 3,
     (0 is Remainder, getSumOfDigitsMod3Up(Div, C), Y is Mod + C ; getSumOfDigitsMod3Up(Div, Y)).
     
+% 11.18
+% getSumOfDigitsMod3Down(329,Y).  -> Y = 12
+getSumOfDigitsMod3Down(X,Y,Z):-
+    X < 10,
+    Mod is X mod 3,
+    (0 is Mod, Y is Z + X ; Y is Z).
+getSumOfDigitsMod3Down(X,Y,Z):-
+    Mod is X mod 10,
+    Div is X div 10,
+    Remainder is N mod 3,
+    (0 is Remainder, NewZ is Remainder + Z; NewZ is Z),
+    getSumOfDigitsMod3Down(Div,Y,NewZ).
+getSumOfDigitsMod3Down(X,Y):- getSumOfDigitsMod3Down(X,Y,0).
