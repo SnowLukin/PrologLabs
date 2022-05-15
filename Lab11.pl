@@ -89,7 +89,7 @@ getSumOfDigitsMod3Down(X,Y,Z):-
 getSumOfDigitsMod3Down(X,Y,Z):-
     Mod is X mod 10,
     Div is X div 10,
-    Remainder is N mod 3,
+    Remainder is Mod mod 3,
     (0 is Remainder, NewZ is Remainder + Z; NewZ is Z),
     getSumOfDigitsMod3Down(Div,Y,NewZ).
 getSumOfDigitsMod3Down(X,Y):- getSumOfDigitsMod3Down(X,Y,0).
