@@ -93,3 +93,12 @@ getSumOfDigitsMod3Down(X,Y,Z):-
     (0 is Remainder, NewZ is Remainder + Z; NewZ is Z),
     getSumOfDigitsMod3Down(Div,Y,NewZ).
 getSumOfDigitsMod3Down(X,Y):- getSumOfDigitsMod3Down(X,Y,0).
+
+% 11.19
+% fibonacciUp(4,X).  -> X = 3
+fibonacciUp(Index, Number) :- Index < 3, Number is 1.
+fibonacciUp(Index, Number) :-
+    PreviousIndex is Index - 1, PrePreviousIndex is Index - 2,
+    fibonacciUp(PreviousIndex,PreviousNumber),
+    fibonacciUp(PrePreviousIndex,PrePreviousNumber),
+    Number is PreviousNumber + PrePreviousNumber.
