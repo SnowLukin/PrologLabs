@@ -96,9 +96,20 @@ getSumOfDigitsMod3Down(X,Y):- getSumOfDigitsMod3Down(X,Y,0).
 
 % 11.19
 % fibonacciUp(4,X).  -> X = 3
-fibonacciUp(Index, Number) :- Index < 3, Number is 1.
-fibonacciUp(Index, Number) :-
+fibonacciUp(Index,Number) :- Index < 3, Number is 1.
+fibonacciUp(Index,Number) :-
     PreviousIndex is Index - 1, PrePreviousIndex is Index - 2,
     fibonacciUp(PreviousIndex,PreviousNumber),
     fibonacciUp(PrePreviousIndex,PrePreviousNumber),
     Number is PreviousNumber + PrePreviousNumber.
+
+% 11.20
+% fibonacciDown(4,X).  -> X = 3
+fibonacciDown(0,X,LX,PLX):- X is LX + PLX.
+fibonacciDown(N,X,_,_):- N < 0, X is 1.
+fibonacciDown(N,X,LX,PLX):-
+    NewN is N - 1,
+    NLX is LX + PLX,
+    NPLX is LX,
+    fibonacciDown(NewN,X,NLX,NPLX).
+fibonacciDown(N,X) :- N1 is N - 2, fibonacciDown(N1,X,1,0).
