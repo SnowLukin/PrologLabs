@@ -34,6 +34,10 @@ parent(maria, mary).
 son(X,Y):- parent(Y,X), man(X).
 son(X):- parent(X,Y), man(Y), write(Y), nl.
 
+
+grandDaughter(X,Y):- parent(Z,X), parent(Y,Z), woman(X).
+wife(X,Y):- grandDaughter(Z,Y), parent(X,Z).
+
 %11.12
 sister(X,Y):- parent(Z,X), parent(Z,Y), woman(X).
 sister(X):- sister(Y,X), woman(Y), write(Y), nl.
@@ -47,6 +51,10 @@ grandpa_daughter(X,Y):-
 parent(X,Z), parent(Z,Y), woman(Y), man(X) |
 parent(Y,Z), parent(Z,X), woman(X), man(Y).
 
+% Extra task
+couple(X,Y):- parent(X,Z), parent(Y,Z).
+husbandsFather(X,Y):- couple(X,Z), man(Z), parent(Y,Z).
+
 %11.15
 maxRecUp(X, X):- X < 10, !.
 maxRecUp(X, Max):-
@@ -54,7 +62,6 @@ maxRecUp(X, Max):-
    Xmod is X mod 10,
    maxRecUp(Xdiv, NewMax),
    (Xmod < NewMax, Max is NewMax; Max is Xmod).
-
 
 %11.16
 maxRecDown(X, Max):- maxRecDown(X, 0, Max).
@@ -112,4 +119,4 @@ fibonacciDown(N,X,LX,PLX):-
     NLX is LX + PLX,
     NPLX is LX,
     fibonacciDown(NewN,X,NLX,NPLX).
-fibonacciDown(N,X) :- N1 is N - 2, fibonacciDown(N1,X,1,0).
+fibonacciDown(N,X):- N1 is N - 2, fibonacciDown(N1,X,1,0).
