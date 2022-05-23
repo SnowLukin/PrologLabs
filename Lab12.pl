@@ -206,20 +206,20 @@ mergeLists([], List, List).
 mergeLists([Head|Tail], List, [Head|ResultTail]):-
     mergeLists(Tail, List, ResultTail).
 
-moveToLeft([H|T], R) :- mergeLists(T, [H], R).
+moveToLeft([H|T], R):- mergeLists(T, [H], R).
 
-rotation(List, 0, Result):- Result = List, !.
-rotation(List, Movements, Result):-
+moveToRight(List, 0, Result):- Result = List, !.
+moveToRight(List, Movements, Result):-
     moveToLeft(List, NewList),
     NewMovements is Movements - 1,
-    rotation(NewList, NewMovements, Result).
+    moveToRight(NewList, NewMovements, Result).
     
-doRotations(List, 0, Result):- Result = List, !.
-doRotations(List, Rotations, Result):-
+doRotationToRight(List, 0, Result):- Result = List, !.
+doRotationToRight(List, Rotations, Result):-
     listLength(List, Length),
     Movements is Length - 1,
     rotation(List, Movements, NewList),
     NewRotations is Rotations - 1,
-    doRotations(NewList, NewRotations, Result).
+    doRotationToRight(NewList, NewRotations, Result).
     
     
