@@ -66,10 +66,13 @@ eulerFunctionDown_(NumberToCheck, CoPrimeCounter, Number, AmountOfCoPrimes):-
         X = 1
 */
 
-isDivider(Number, Divider):- Mod is Number mod Divider, 0 is Mod.
+isDivider(Number, Divider):-
+    0 \= Divider,
+    Mod is Number mod Divider,
+    0 is Mod; false, !.
 
-getDividers(Number, DividersList):- getDividers(Number, Number, [], DividersList).
-getDividers(_, 0, List, ResultList):- ResultList = List.
+getDividers(Number, DividersList):- getDividers(Number, Number, [], DividersList), !.
+getDividers(_, 0, List, ResultList):- ResultList = List, !.
 getDividers(Number, Divider, List, ResultList):-
     isDivider(Number, Divider),
     append([Divider], List, NewList),
@@ -120,3 +123,62 @@ getDividerMaxAmountOfDigitsCoPrime(Number, Result):-
     Result is ResultDivider.
     
 
+% -------- 13 --------
+
+% 1000000
+
+getAmountOfDividers(Number, Result):-
+    getDividers(Number, DividersList),
+    length(DividersList, Length),
+    Result is Length.
+
+isPrime(1):- false, !.
+isPrime(Number):- Number < 1, false.
+isPrime(Number):-
+    getAmountOfDividers(Number, AmountOfDividers),
+    AmountOfDividers < 3; false.
+
+isNotPrime(1):- true, !.
+isNotPrime(Number):- Number < 1, true.
+isNotPrime(Number):-
+    getAmountOfDividers(Number, AmountOfDividers),
+    AmountOfDividers > 2; true.
+
+cutLeft(Number):- Number < 10, isPrime(Number), !.
+cutLeft(Number):-
+    isPrime(Number),
+    Div is Number div 10,
+    cutLeft(Div), !;
+    false, !.
+
+% WTF is this Prolog?! Who the hell made it so complicated
+cutRight(Number):-
+    cutRight__(Number, Result), NewResult is Result, 1 is NewResult.
+cutRight__(Number, Result):- cutRight_(Number, Result), !.
+cutRight_(Number, Result):-
+    Number < 10,
+    (isPrime(Number), Result is 1; Result is 0), !.
+cutRight_(Number, Result):-
+    isPrime(Number),
+    getDigits(Number, DigitsList),
+    length(DigitsList, Length),
+    NewLength is Length - 1,
+    SubLength is 10 ** NewLength,
+    Mod is Number mod SubLength,
+    cutRight_(Mod, Result);
+    Result is 0, !.
+
+task14(Number, Result):- task14(Number, 0, Result), !.
+task14(0, Counter, Result):- Result is Counter.
+task14(Number, Counter, Result):-
+    cutLeft(Number),
+    cutRight(Number),
+    writeln(Number),
+    NewNumber is Number - 1,
+    NewCounter is Counter + 1,
+    write('Counter: '),
+    writeln(Counter),
+    task14(NewNumber, NewCounter, Result);
+    writeln(Number),
+    NewNumber is Number - 1,
+    task14(NewNumber, Counter, Result).
