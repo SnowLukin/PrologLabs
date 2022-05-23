@@ -206,10 +206,6 @@ mergeLists([], List, List).
 mergeLists([Head|Tail], List, [Head|ResultTail]):-
     mergeLists(Tail, List, ResultTail).
 
-rotatelist(List, R):- rotatelist(List, R1, H), R = [H|R1].
-rotatelist([H], [], H).
-rotatelist([H|T], L, R) :- rotatelist(T, T1, R), L = [H|T1].
-
 moveToLeft([H|T], R) :- mergeLists(T, [H], R).
 
 rotation(List, 0, Result):- Result = List, !.
