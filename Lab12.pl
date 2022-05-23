@@ -189,3 +189,41 @@ listLength([], Counter, Result):- Result is Counter.
 listLength([_|Tail], Counter, Result):-
     NewCounter is Counter + 1,
     listLength(Tail, NewCounter, Result).
+
+
+% -------- 15.7 --------
+
+% read_list(+N,-List)
+read_list(0,[]):-!.
+read_list(N,[H|T]):- read(H),
+    Nmines1 is N - 1, read_list(Nmines1,T).
+
+% write_list(+list)
+write_list([]):-!.
+write_list([H|T]):- write(H),write(' '), write_list([T]).
+
+mergeLists([], List, List).
+mergeLists([Head|Tail], List, [Head|ResultTail]):-
+    mergeLists(Tail, List, ResultTail).
+
+rotatelist(List, R):- rotatelist(List, R1, H), R = [H|R1].
+rotatelist([H], [], H).
+rotatelist([H|T], L, R) :- rotatelist(T, T1, R), L = [H|T1].
+
+moveToLeft([H|T], R) :- mergeLists(T, [H], R).
+
+rotation(List, 0, Result):- Result = List, !.
+rotation(List, Movements, Result):-
+    moveToLeft(List, NewList),
+    NewMovements is Movements - 1,
+    rotation(NewList, NewMovements, Result).
+    
+doRotations(List, 0, Result):- Result = List, !.
+doRotations(List, Rotations, Result):-
+    listLength(List, Length),
+    Movements is Length - 1,
+    rotation(List, Movements, NewList),
+    NewRotations is Rotations - 1,
+    doRotations(NewList, NewRotations, Result).
+    
+    
