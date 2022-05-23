@@ -125,8 +125,6 @@ getDividerMaxAmountOfDigitsCoPrime(Number, Result):-
 
 % -------- 13 --------
 
-% 1000000
-
 getAmountOfDividers(Number, Result):-
     getDividers(Number, DividersList),
     length(DividersList, Length),
@@ -182,3 +180,12 @@ task14(Number, Counter, Result):-
     writeln(Number),
     NewNumber is Number - 1,
     task14(NewNumber, Counter, Result).
+
+
+% -------- 14 --------
+
+listLength(List, Result):- listLength(List, 0, Result), !.
+listLength([], Counter, Result):- Result is Counter.
+listLength([_|Tail], Counter, Result):-
+    NewCounter is Counter + 1,
+    listLength(Tail, NewCounter, Result).
