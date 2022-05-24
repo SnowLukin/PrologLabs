@@ -214,12 +214,50 @@ moveToRight(List, Movements, Result):-
     NewMovements is Movements - 1,
     moveToRight(NewList, NewMovements, Result).
     
-doRotationToRight(List, 0, Result):- Result = List, !.
-doRotationToRight(List, Rotations, Result):-
+doRotationsToRight(List, 0, Result):- Result = List, !.
+doRotationsToRight(List, Rotations, Result):-
     listLength(List, Length),
     Movements is Length - 1,
     rotation(List, Movements, NewList),
     NewRotations is Rotations - 1,
-    doRotationToRight(NewList, NewRotations, Result).
+    doRotationsToRight(NewList, NewRotations, Result).
     
     
+% -------- 15.8 --------
+
+%   Дан целочисленный массив. Необходимо найти индексы двух наименьших элементов массива.
+
+getMinElementIndex([Head|Tail], Index):- getMinElementIndex(Tail, Head, 0, 0, Index), !.
+getMinElementIndex([], _, _, MinIndex, Index):- Index is MinIndex.
+getMinElementIndex([Head|Tail], Min, CurrentIndex, MinIndex, Index):-
+    Head < Min,
+    NewCurrentIndex is CurrentIndex + 1,
+    NewMinIndex is NewCurrentIndex,
+    getMinElementIndex(Tail, Head, NewCurrentIndex, NewMinIndex, Index);
+    NewCurrentIndex is CurrentIndex + 1,
+    getMinElementIndex(Tail, Min, NewCurrentIndex, MinIndex, Index).
+
+getElementAtIndex(List, Index, Element):- getElementAtIndex(List, Index, 0, Element), !.
+getElementAtIndex([], _, _, Element):- Element is 0.
+getElementAtIndex([Head|Tail], Index, CurrentIndex, Element):-
+    CurrentIndex is Index,
+    Element is Head;
+    NewCurrentIndex is CurrentIndex + 1,
+    getElementAtIndex(Tail, Index, NewCurrentIndex, Element).
+
+removeFromList(Element, List, Result):- removeFromList_(Element, List, Result), !.
+removeFromList_( _, [], []).
+removeFromList_(Element, [Element|Tail], Tail).
+removeFromList_(Element, [Head|Tail], [Head|ResultTail]):-
+    Head \= Element,
+    removeFromList_(Element, Tail, ResultTail).
+
+getIndexesOfMinElements([], _):- !.
+getIndexesOfMinElements(_, AmountOfMin):- AmountOfMin < 1, !.
+getIndexesOfMinElements(List, AmountOfMin):-
+    getMinElementIndex(List, Index),
+    write(Index), write(' '),
+    NewAmountOfMin is AmountOfMin - 1,
+    getElementAtIndex(List, Index, Element),
+    removeFromList(Element, List, NewList),
+    getIndexesOfMinElements(NewList, NewAmountOfMin).
