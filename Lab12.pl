@@ -328,19 +328,16 @@ localMax(List, Result):- localMax(List, 0, [], Result), !.
 localMax([], _, List, Result):- Result = List, !.
 localMax([X, Y, Z|Tail], 1, List, Result):-
     Y > X, Y > Z,
-    writeln('middle'),
     mergeLists(List, [Y], NewList),
     localMax([Z|Tail], 1, NewList, Result);
     localMax([Z|Tail], 1, List, Result).
 localMax([X, Y| Tail], 0, List, Result):-
     X > Y,
-    writeln('Begining'),
     mergeLists(List, [X], NewList),
     localMax([Y|Tail], 1, NewList, Result);
     localMax([Y|Tail], 1, List, Result).
 localMax([X, Y| _], _, List, Result):-
     Y > X,
-    writeln('End'),
     mergeLists(List, [Y], NewList),
     localMax([], 1, NewList, Result);
     localMax([], 1, List, Result).
