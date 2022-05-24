@@ -342,6 +342,17 @@ localMax([X, Y| _], _, List, Result):-
     localMax([], 1, NewList, Result);
     localMax([], 1, List, Result).
 
-
-
+% -------- 15.35 --------
+    
+getClosestElement(Number, [Head|Tail], Result):-
+    Sub is Head - Number,
+    Delta is Sub * Sub,
+    getClosestElement(Number, Tail, Delta, Head, Result), !.
+getClosestElement(_, [], _, Number, Result):- Result is Number.
+getClosestElement(Number, [Head|Tail], Delta, ResultNumber, Result):-
+    Sub is Head - Number,
+    NewDelta is Sub * Sub,
+    NewDelta < Delta,
+    getClosestElement(Number, Tail, NewDelta, Head, Result);
+    getClosestElement(Number, Tail, Delta, ResultNumber, Result).
     
