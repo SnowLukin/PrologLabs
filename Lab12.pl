@@ -261,3 +261,22 @@ getIndexesOfMinElements(List, AmountOfMin):-
     getElementAtIndex(List, Index, Element),
     removeFromList(Element, List, NewList),
     getIndexesOfMinElements(NewList, NewAmountOfMin).
+
+
+% -------- 15.18 --------
+
+% Дан целочисленный массив. Необходимо найти элементы, расположенные перед первым минимальным.
+
+reduceToIndex(List, Index, Result):- reduceToIndex(List, Index, 0, [], Result), !.
+reduceToIndex([], _, _, TempList, Result):- Result = TempList.
+reduceToIndex(_, Index, Index, TempList, Result):- Result = TempList.
+reduceToIndex([Head|Tail], Index, CurrentIndex, TempList, Result):-
+    NewCurrentIndex is CurrentIndex + 1,
+    mergeLists(TempList, [Head], NewTempList),
+    reduceToIndex(Tail, Index, NewCurrentIndex, NewTempList, Result).
+
+getElementBeforeMin(List, Result):-
+    getMinElementIndex(List, Index),
+    reduceToIndex(List, Index, NewList),
+    Result = NewList, !.
+
