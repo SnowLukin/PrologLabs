@@ -280,3 +280,71 @@ getElementBeforeMin(List, Result):-
     reduceToIndex(List, Index, NewList),
     Result = NewList, !.
 
+
+% -------- 15.20 --------
+
+getMaxElementIndex([Head|Tail], Index):- getMaxElementIndex(Tail, Head, 0, 0, Index), !.
+getMaxElementIndex([], _, _, MaxIndex, Index):- Index is MaxIndex.
+getMaxElementIndex([Head|Tail], Max, CurrentIndex, MaxIndex, Index):-
+    Head > Max,
+    NewCurrentIndex is CurrentIndex + 1,
+    NewMaxIndex is NewCurrentIndex,
+    getMaxElementIndex(Tail, Head, NewCurrentIndex, NewMaxIndex, Index);
+    NewCurrentIndex is CurrentIndex + 1,
+    getMaxElementIndex(Tail, Max, NewCurrentIndex, MaxIndex, Index).
+
+getMinElement(List, Result):-
+    getMinElementIndex(List, Index),
+    getElementAtIndex(List, Index, MinElement),
+    Result is MinElement, !.
+
+getMaxElement(List, Result):-
+    getMaxElementIndex(List, Index),
+    getElementAtIndex(List, Index, MaxElement),
+    Result is MaxElement, !.
+
+buildList(From, To, Result):- buildList(From, To, From, [], Result), !.
+buildList(_, To, To, List, Result):- mergeLists(List, [To], NewList), Result = NewList.
+buildList(From, To, CurrentNumber, List, Result):-
+    mergeLists(List, [CurrentNumber], NewList),
+    NewCurrentNumber is CurrentNumber + 1,
+    buildList(From, To, NewCurrentNumber, NewList, Result).
+
+removeIdentical([], List, Result):- Result = List, !.
+removeIdentical([Head|Tail], List, Result):-
+    removeFromList(Head, List, NewList),
+    removeIdentical(Tail, NewList, Result).
+
+getMissingNumbers(List, Result):-
+    getMinElement(List, MinElement),
+    getMaxElement(List, MaxElement),
+    buildList(MinElement, MaxElement, NewList),
+    removeIdentical(List, NewList, ResultList),
+    Result = ResultList, !.
+    
+% -------- 15.32 --------
+
+localMax(List, Result):- localMax(List, 0, [], Result), !.
+localMax([], _, List, Result):- Result = List, !.
+localMax([X, Y, Z|Tail], 1, List, Result):-
+    Y > X, Y > Z,
+    writeln('middle'),
+    mergeLists(List, [Y], NewList),
+    localMax([Z|Tail], 1, NewList, Result);
+    localMax([Z|Tail], 1, List, Result).
+localMax([X, Y| Tail], 0, List, Result):-
+    X > Y,
+    writeln('Begining'),
+    mergeLists(List, [X], NewList),
+    localMax([Y|Tail], 1, NewList, Result);
+    localMax([Y|Tail], 1, List, Result).
+localMax([X, Y| _], _, List, Result):-
+    Y > X,
+    writeln('End'),
+    mergeLists(List, [Y], NewList),
+    localMax([], 1, NewList, Result);
+    localMax([], 1, List, Result).
+
+
+
+    
