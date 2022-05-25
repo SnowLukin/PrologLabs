@@ -234,17 +234,70 @@ task15(Result):-
 */
 
 task16:-
-    Workers = [_,_,_],
-    listContains(Workers,[locksmith, _, 0, 0, _]),
-    listContains(Workers,[turner, _, _, 1, _]),
-    listContains(Workers,[welder, _, _, _, _]),
-    listContains(Workers,[_, semenov, _, 2, borisov]),
-    listContains(Workers,[_, ivanov, _, _, _]),
-    listContains(Workers,[_, borisov, 1, _, _]),
+    Workers = [_, _, _],
+    
+    listContains(Workers,[locksmith,    _,    0, 0,    _   ]),
+    listContains(Workers,[turner,       _,    _, 1,    _   ]),
+    listContains(Workers,[welder,       _,    _, _,    _   ]),
+    listContains(Workers,[_,         semenov, _, 2, borisov]),
+    listContains(Workers,[_,          ivanov, _, _,    _   ]),
+    listContains(Workers,[_,         borisov, 1, _,    _   ]),
+    
     listContains(Workers,[locksmith, Locksmith, _, _, _]),
     listContains(Workers,[turner, Turner, _, _, _]),
     listContains(Workers,[welder, Welder, _, _, _]),
+    
     write('Locksmith: '), writeln(Locksmith),
     write('Turner: '), writeln(Turner),
     write('Welder: '), writeln(Welder), !.
+
+% ------- 17 -------
+
+% В бутылке, стакане, кувшине и банке находятся молоко, ли-
+% монад, квас и вода. Известно, что вода и молоко не в бутылке, сосуд с лимона-
+% дом находится между кувшином и сосудом с квасом, в банке - не лимонад и не
+% вода. Стакан находится около банки и сосуда с молоком. Как распределены
+% эти жидкости по сосудам.
+
+isOnRight(_, _, [_]):- false, !.
+isOnRight(A, B, [A|[B|_]]).
+isOnRight(A, B, [_|List]):- isOnRight(A,B,List).
+
+isOnLeft(_, _, [_]):- false, !.
+isOnLeft(A, B, [B|[A|_]]).
+isOnLeft(A, B, [_|List]):- isOnLeft(A,B,List).
+
+next(A, B, List):- isOnRight(A, B, List).
+next(A, B, List):- isOnLeft(A, B, List).
+
+task17(Result):-
+    Drinks = [_,_,_,_],
+    
+    listContains(Drinks,[bottle, _]),
+    listContains(Drinks,[glass, _]),
+    listContains(Drinks,[ewer, _]),
+    listContains(Drinks,[jar, _]),
+    listContains(Drinks,[_, milk]),
+    listContains(Drinks,[_, lemonade]),
+    listContains(Drinks,[_, kvas]),
+    listContains(Drinks,[_, water]),
+    
+    % Вода и молоко не в бутылке
+    not(listContains(Drinks,[bottle, milk])),
+    not(listContains(Drinks,[bottle, water])),
+    
+    % В банке - не лимонад и не вода
+    not(listContains(Drinks,[jar, lemonade])),
+    not(listContains(Drinks,[jar, water])),
+    
+    % Сосуд с лимонадом находится между кувшином и сосудом с квасом
+    isOnRight([ewer, _], [_, lemonade], Drinks),
+    isOnRight([_, lemonade], [_, kvas], Drinks),
+    
+    % Стакан находится около банки и сосуда с молоком
+    next([glass, _], [jar, _], Drinks),
+    next([glass, _],[_, milk], Drinks),
+    
+    Result = Drinks, !.
+
 
