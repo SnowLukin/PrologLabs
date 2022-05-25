@@ -406,7 +406,7 @@ task19:-
     Кто из студентов родом из Москвы ?
 */
 
-task20(Result):-
+task20:-
     Students = [_, _, _, _, _],
     
     % [name, city, bycicle city]
@@ -440,5 +440,6 @@ task20(Result):-
     not(listContains(Students, [_, lviv, lviv])),
     not(listContains(Students, [_, penza, penza])),
     not(listContains(Students, [_, kharkiv, kharkiv])),
-
-    Result = Students, !.
+    
+    listContains(Students, [Name, moscow, _]),
+    write("Student from moscow is "), writeln(Name), !.
