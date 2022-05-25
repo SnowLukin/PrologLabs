@@ -1,3 +1,7 @@
+listContains([],_):- false, !.
+listContains([Head|_],Head).
+listContains([_|Tail],Number):- listContains(Tail,Number).
+
 mergeLists([], List, List).
 mergeLists([Head|Tail], List, [Head|ResultTail]):-
     mergeLists(Tail, List, ResultTail).
@@ -174,10 +178,6 @@ task1_56(List, Result):-
 % третий - рыжий, но ни у кого цвет волос не соответствует фамилии”. Какой
 % цвет волос у каждого из друзей?
 
-listContains([],_):- false, !.
-listContains([Head|_],Head).
-listContains([_|Tail],Number):- listContains(Tail,Number).
-
 task14(Result):-
     List = [_,_,_],
     listContains(List,[belokurov, _]),
@@ -191,4 +191,60 @@ task14(Result):-
     not(listContains(List,[rizhov,red])),
     Result = List, !.
 
+% ------- 15 -------
+
+% Три подруги вышли в белом, зеленом и синем платьях и туф-
+% лях. Известно, что только у Ани цвета платья и туфлей совпадали. Ни туфли,
+% ни платье Вали не были белыми. Наташа была в зеленых туфлях. Определить
+% цвета платья и туфель на каждой из подруг.
+
+task15(Result):-
+    List = [_, _, _],
+    listContains(List,[ann, _, _]),
+    listContains(List,[valya, _, _]),
+    listContains(List,[natasha, _, _]),
+    listContains(List,[_, white, _]),
+    listContains(List,[_, green, _]),
+    listContains(List,[_, blue, _]),
+    listContains(List,[_, _, white]),
+    listContains(List,[_, _, green]),
+    listContains(List,[_, _, blue]),
+    listContains(List,[natasha, _, green]),
+    not(listContains(List,[valya, white, white])),
+    not(listContains(List,[natasha, green, _])),
+    Result = List, !.
+
+% ------- 16 -------
+
+% На заводе работали три друга: слесарь, токарь и сварщик. Их
+% фамилии Борисов, Иванов и Семенов. У слесаря нет ни братьев, ни сестер. Он
+% самый младший из друзей. Семенов, женатый на сестре Борисова, старше то-
+% каря. Назвать фамилии слесаря, токаря и сварщика.
+
+% [профессия, фамилия, кол-во сестер, старшинство, жена]
+
+/*
+    Слесарь не Борисов (у борисова сестра, у слесаря нет)
+    Слесарь не Семенов (слесарь самый младший, а Семенов старше токаря)
+    -> Слесарь - Иванов
+
+    Семенов старше токаря -> Токарь не Семенов
+    -> Токарь - Борисов
+    -> Сварщик - Семенов
+*/
+
+task16:-
+    Workers = [_,_,_],
+    listContains(Workers,[locksmith, _, 0, 0, _]),
+    listContains(Workers,[turner, _, _, 1, _]),
+    listContains(Workers,[welder, _, _, _, _]),
+    listContains(Workers,[_, semenov, _, 2, borisov]),
+    listContains(Workers,[_, ivanov, _, _, _]),
+    listContains(Workers,[_, borisov, 1, _, _]),
+    listContains(Workers,[locksmith, Locksmith, _, _, _]),
+    listContains(Workers,[turner, Turner, _, _, _]),
+    listContains(Workers,[welder, Welder, _, _, _]),
+    write('Locksmith: '), writeln(Locksmith),
+    write('Turner: '), writeln(Turner),
+    write('Welder: '), writeln(Welder), !.
 
