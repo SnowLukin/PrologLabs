@@ -338,3 +338,53 @@ task18(Result):-
     not(listContains(Guys, [pavlov, writer])),
 
     Result = Guys, !.
+
+
+% ------- 19 -------
+
+/*
+    Три друга заняли первое, второе, третье места в соревнованиях универсиады.
+    Друзья разной национальности, зовут их по-разному, и любят они разные
+    виды спорта. Майкл предпочитает баскетбол и играет лучше,
+    чем американец. Израильтянин Саймон играет лучше теннисиста.
+    Игрок в крикет занял первое место. Кто является австралийцем?
+    Каким спортом увлекается Ричард?
+*/
+
+task19:-
+    Athletes = [_,_,_],
+
+    % [name, nationality, sport, place]
+    
+    % Майкл предпочитает баскетбол
+    listContains(Athletes, [michael, _, basketball, _]),
+    
+    % Саймон - израильтянин
+    listContains(Athletes, [saimon, isrial, _, _]),
+
+    % Игрок в крикет занял первое место
+    listContains(Athletes, [_, _, cricket, first]),
+    
+    listContains(Athletes, [richard, _, _, _]),
+
+    listContains(Athletes, [_, _, tennis, _]),
+    listContains(Athletes, [_, american, _, _]),
+    listContains(Athletes, [_, austrian, _, _]),
+    
+    listContains(Athletes, [_, _, _, second]),
+    listContains(Athletes, [_, _, _, third]),
+
+    % Майкл играет лучше, чем американец
+    not(listContains(Athletes, [michael, american, _, _])),
+    
+    % Саймон играет лучше теннисиста
+    not(listContains(Athletes, [saimon, _, tennis, _])),
+
+    listContains(Athletes, [Austrian, austrian, _, _]),
+    listContains(Athletes, [richard, _, RichardsSport, _]),
+    
+    write('Austrian: '), writeln(Austrian),
+    write('Richards sport is '), writeln(RichardsSport), !.
+
+
+
