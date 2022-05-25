@@ -388,3 +388,57 @@ task19:-
 
 
 
+% ------- 20 -------
+
+/*
+    Пятеро студентов едут на велосипедах.
+    Их зовут Сергей, Борис, Леонид, Григорий и Виктор.
+    Велосипеды сделаны в пяти городах: Риге, Пензе, Львове, Харькове
+    и Москве.
+    Каждый из студентов родился в одном из этих городов, но ни один
+    из студентов не едет на велосипеде, сделанном на его родине.
+    Сергей едет на велосипеде, сделанном в Риге.
+    Борис родом из Риги, у него велосипед из Пензы.
+    У Виктора велосипед из Москвы.
+    У Григория велосипед из Харькова.
+    Виктор родом из Львова.
+    Уроженец Пензы едет на велосипеде, сделанном на родине Леонида.
+    Кто из студентов родом из Москвы ?
+*/
+
+task20(Result):-
+    Students = [_, _, _, _, _],
+    
+    % [name, city, bycicle city]
+
+    % Сергей едет на велосипеде, сделанном в Риге.
+    listContains(Students, [sergey, _, riga]),
+    
+    % Борис родом из Риги, у него велосипед из Пензы.
+    listContains(Students, [boris, riga, penza]),
+    
+    listContains(Students, [leo, _, _]), % kharkiv
+    
+    % У Григория велосипед из Харькова.
+    listContains(Students, [jorge, _, kharkiv]),
+    
+    % У Виктора велосипед из Москвы. Виктор родом из Львова.
+    listContains(Students, [victor, lviv, moscow]),
+    
+    listContains(Students, [_, _, lviv]),
+    listContains(Students, [_, kharkiv, _]),
+    listContains(Students, [_, moscow, _]),
+    listContains(Students, [_, penza, _]),
+    
+    % Уроженец Пензы едет на велосипеде, сделанном на родине Леонида.
+    not(listContains(Students, [leo, penza, _])),
+    listContains(Students, [leo, Country, _]),
+    listContains(Students, [_, penza, Country]),
+
+    not(listContains(Students, [_, riga, riga])),
+    not(listContains(Students, [_, moscow, moscow])),
+    not(listContains(Students, [_, lviv, lviv])),
+    not(listContains(Students, [_, penza, penza])),
+    not(listContains(Students, [_, kharkiv, kharkiv])),
+
+    Result = Students, !.
