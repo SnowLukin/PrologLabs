@@ -45,3 +45,31 @@ task1_38(List, From, To, Result):-
     buildList(From, To, Segment),
     getElementsContainedInList(List, Segment, NewList),
     Result = NewList, !.
+
+% ------- 1.44 -------
+/*
+    Example:
+        ?- task1_44([1,2.2,4,5,7,8.8]).
+        Do NOT Interchange
+        true.
+
+        ?- task1_44([1,2.2,4,5.1,7,8.8]).
+        Do Interchange
+        true.
+*/
+
+task1_44([X,Y|Tail]):-
+    integer(X),
+    float(Y),
+    mergeLists([Y], Tail, NewList),
+    task1_44(NewList), !.
+task1_44([X,Y|Tail]):-
+    float(X),
+    integer(Y),
+    mergeLists([Y], Tail, NewList),
+    task1_44(NewList), !.
+task1_44([X,Y|_]):- integer(X), integer(Y), write('Do NOT Interchange'), !.
+task1_44([X,Y|_]):- float(X), float(Y), write('Do NOT Interchange'), !.
+task1_44(_):- write('Do Interchange'), !.
+
+    
