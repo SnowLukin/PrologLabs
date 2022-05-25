@@ -301,3 +301,40 @@ task17(Result):-
     Result = Drinks, !.
 
 
+% ------- 18 -------
+
+/*
+    Воронов, Павлов, Левицкий и Сахаров – четыре талантливых
+    молодых человека. Один из них танцор, другой художник, третий - певец,
+    а четвертый-писатель. О них известно следующее: Воронов и Левицкий
+    сидели в зале консерватории в тот вечер, когда певец дебютировал в сольном
+    концерте. Павлов и писатель вместе позировали художнику. Писатель написал
+    биографическую повесть о Сахарове и собирается написать о Воронове.
+    Воронов никогда не слышал о Левицком. Кто чем занимается?
+*/
+
+task18(Result):-
+    Guys = [_, _, _, _],
+    
+    listContains(Guys, [voronov, _]),
+    listContains(Guys, [pavlov, _]),
+    listContains(Guys, [levizkyi, _]),
+    listContains(Guys, [saharov, _]),
+    listContains(Guys, [_, dancer]),
+    listContains(Guys, [_, artist]),
+    listContains(Guys, [_, singer]),
+    listContains(Guys, [_, writer]),
+    
+    % Певец - не Воронов или Левицкий
+    not(listContains(Guys, [voronov, singer])),
+    not(listContains(Guys, [levizkyi, singer])),
+    
+    % Художник - не Павлов
+    not(listContains(Guys, [pavlov, artist])),
+
+    % Писатель - не Сахоров, Воронов, Павлов
+    not(listContains(Guys, [saharov, writer])),
+    not(listContains(Guys, [voronov, writer])),
+    not(listContains(Guys, [pavlov, writer])),
+
+    Result = Guys, !.
