@@ -35,8 +35,8 @@ son(X,Y):- parent(Y,X), man(X).
 son(X):- parent(X,Y), man(Y), write(Y), nl.
 
 
-grandDaughter(X,Y):- parent(Z,X), parent(Y,Z), woman(X).
-wife(X,Y):- grandDaughter(Z,Y), parent(X,Z).
+%grandDaughter(X,Y):- parent(Z,X), parent(Y,Z), woman(X).
+%wife(X,Y):- grandDaughter(Z,Y), parent(X,Z).
 
 %11.12
 sister(X,Y):- parent(Z,X), parent(Z,Y), woman(X).
@@ -52,8 +52,18 @@ parent(X,Z), parent(Z,Y), woman(Y), man(X) |
 parent(Y,Z), parent(Z,X), woman(X), man(Y).
 
 % Extra task
-couple(X,Y):- parent(X,Z), parent(Y,Z).
+
+couple(X,Y):-
+    woman(Y),
+    parent(X,Z),
+    parent(Y,Z).
+
+brother(X,Y):- man(X), parent(Z,Y), parent(Z,X).
+
+shurin(X, Y):- couple(X,Z), brother(Y, Z).
+
 husbandsFather(X,Y):- couple(X,Z), man(Z), parent(Y,Z).
+
 
 %11.15
 maxRecUp(X, X):- X < 10, !.

@@ -218,7 +218,7 @@ doRotationsToRight(List, 0, Result):- Result = List, !.
 doRotationsToRight(List, Rotations, Result):-
     listLength(List, Length),
     Movements is Length - 1,
-    rotation(List, Movements, NewList),
+    moveToRight(List, Movements, NewList),
     NewRotations is Rotations - 1,
     doRotationsToRight(NewList, NewRotations, Result).
     
