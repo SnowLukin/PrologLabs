@@ -167,3 +167,35 @@ writeStringNTimes(Str, N) :-
     writeString(Str),
     NewN is N - 1,
     writeStringNTimes(Str, NewN),!.
+
+
+% --------- 1.5 ---------
+
+% Дана строка. Показать номера символов, совпадающих с последним
+% символом строки.
+
+/*
+    Example:
+        ?- task1_5.
+        |: somomo
+        [1,3,5]
+        true.
+*/
+
+task1_5 :-
+    readString(Str, Length),
+    NewLength is Length - 1,
+    subString(Str, NewLength, Length, [Char|_]),
+    indexesCharacter(Str, Char, Result),
+    write(Result).
+
+indexesCharacter(List, X, Result) :-
+    indexesCharacter(List, X, 0, [], Result).
+indexesCharacter([X|T], X, Index, List, Result) :-
+    appendString(List, [Index], NewList),
+    NewIndex is Index + 1,
+    indexesCharacter(T, X, NewIndex, NewList, Result),!.
+indexesCharacter([_|T], X, Index, List, Result) :-
+    NewIndex is Index + 1,
+    indexesCharacter(T, X, NewIndex, List, Result),!.
+indexesCharacter([], _, _, Result, Result) :- !.
