@@ -183,12 +183,15 @@ task14(Result):-
     listContains(List,[belokurov, _]),
     listContains(List,[chernov, _]),
     listContains(List,[rizhov, _]),
+
     listContains(List,[_, red]),
     listContains(List,[_, blond]),
     listContains(List,[_, brunette]),
+
     not(listContains(List,[belokurov,blond])),
     not(listContains(List,[chernov,brunette])),
     not(listContains(List,[rizhov,red])),
+
     Result = List, !.
 
 % ------- 15 -------
@@ -442,4 +445,5 @@ task20:-
     not(listContains(Students, [_, kharkiv, kharkiv])),
     
     listContains(Students, [Name, moscow, _]),
+    writeln(Students),
     write("Student from moscow is "), writeln(Name), !.
