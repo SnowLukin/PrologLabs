@@ -115,3 +115,55 @@ mostCommonWord(Words, [Word|T], CurMaxCnt, _, Result) :-
 mostCommonWord(Words, [_|T], CurMaxCnt, CurMaxWord, Result) :-
     mostCommonWord(Words, T, CurMaxCnt, CurMaxWord, Result), !.
 mostCommonWord(_, [], _, Result, Result) :-!.
+
+
+% --------- 1.4 ---------
+
+% Дана строка. Вывести первые три символа и последний три символа,
+% если длина строки больше 5 Иначе вывести первый символ столько
+% раз, какова длина строки.
+
+/*
+    Example:
+        ?- task1_4.
+        |: somebody
+        som ody
+        true.
+
+        ?- task1_4.
+        |: some
+        ssss
+        true.
+*/
+
+task1_4 :- readString(Str, N), task1_4(Str, N).
+task1_4(Str, Lenght) :-
+    Lenght > 5,
+    subString(Str, 0, 3, First3),
+    L3 is Lenght - 3,
+    subString(Str, L3, Lenght, Last3),
+    writeString(First3),
+    write(" "),
+    writeString(Last3),!.
+task1_4([H|_], N) :- writeStringNTimes([H], N).
+
+subString([H|T], Start, End, Ans) :-
+    subString([H|T], Start, End, 0, [], Ans).
+
+subString([H|T], Start, End, I, List, Ans) :-
+    I >= Start, I < End,
+    appendString(List, [H], NewList),
+    NewI is I + 1,
+    subString(T, Start, End, NewI, NewList, Ans),!.
+
+subString([_|T], Start, End, I, List, Ans) :-
+    NewI is I + 1,
+    subString(T, Start, End, NewI, List, Ans),!.
+
+subString([], _, _, _, Ans, Ans) :- !.
+
+writeStringNTimes(_, 0) :- !.
+writeStringNTimes(Str, N) :-
+    writeString(Str),
+    NewN is N - 1,
+    writeStringNTimes(Str, NewN),!.
