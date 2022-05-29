@@ -147,20 +147,20 @@ task1_4(Str, Lenght) :-
     writeString(Last3),!.
 task1_4([H|_], N) :- writeStringNTimes([H], N).
 
-subString([H|T], Start, End, Ans) :-
-    subString([H|T], Start, End, 0, [], Ans).
+subString([H|T], Start, End, Result) :-
+    subString([H|T], Start, End, 0, [], Result).
 
-subString([H|T], Start, End, I, List, Ans) :-
+subString([H|T], Start, End, I, List, Result) :-
     I >= Start, I < End,
     appendString(List, [H], NewList),
     NewI is I + 1,
-    subString(T, Start, End, NewI, NewList, Ans),!.
+    subString(T, Start, End, NewI, NewList, Result),!.
 
-subString([_|T], Start, End, I, List, Ans) :-
+subString([_|T], Start, End, I, List, Result) :-
     NewI is I + 1,
-    subString(T, Start, End, NewI, List, Ans),!.
+    subString(T, Start, End, NewI, List, Result),!.
 
-subString([], _, _, _, Ans, Ans) :- !.
+subString([], _, _, _, Result, Result) :- !.
 
 writeStringNTimes(_, 0) :- !.
 writeStringNTimes(Str, N) :-
@@ -199,3 +199,38 @@ indexesCharacter([_|T], X, Index, List, Result) :-
     NewIndex is Index + 1,
     indexesCharacter(T, X, NewIndex, List, Result),!.
 indexesCharacter([], _, _, Result, Result) :- !.
+
+
+
+% --------- 2.1 ---------
+
+% Дан файл. Прочитать из файла строки и вывести длину наибольшей строки.
+
+task2_1 :- see('/Users/snowlukin/Desktop/PrologLabs/2_1.txt'), readStringList(StringsList), seen, maxLengthList(StringsList, MaxLen), write(MaxLen),!.
+
+count([X|T], Result) :-
+    count([X|T], 0, Result).
+count([_|T], Count, Result) :-
+    NewCount is Count + 1,
+    count(T, NewCount, Result), !.
+count([], Result, Result) :- !.
+
+readStringList(List) :-
+    readString(A,_,Flag),
+    readStringList([A],List,Flag).
+readStringList(List,List,1) :- !.
+readStringList(Cur_list,List,0) :-
+    readString(A,_,Flag),
+    (not(A = []), appendString(Cur_list,[A],C_l),
+    readStringList(C_l,List,Flag);
+    readStringList(Cur_list,List,Flag)),!.
+
+maxLengthList(List, Result) :-
+    maxLengthList(List, 0, Result).
+maxLengthList([H|T], CurMax, Result) :-
+    count(H, NewMax),
+    NewMax > CurMax,
+    maxLengthList(T, NewMax, Result), !.
+maxLengthList([_|T], CurMax, Result) :-
+    maxLengthList(T, CurMax, Result), !.
+maxLengthList([], Result, Result) :- !.
