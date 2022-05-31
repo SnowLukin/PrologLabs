@@ -206,7 +206,11 @@ indexesCharacter([], _, _, Result, Result) :- !.
 
 % Дан файл. Прочитать из файла строки и вывести длину наибольшей строки.
 
-task2_1 :- see('/Users/snowlukin/Desktop/PrologLabs/2_1.txt'), readStringList(StringsList), seen, maxLengthList(StringsList, MaxLen), write(MaxLen),!.
+task2_1 :-
+    see('/Users/snowlukin/Desktop/PrologLabs/2_1.txt'),
+    readStringList(StringsList), seen,
+    maxLengthList(StringsList, MaxLen),
+    write(MaxLen),!.
 
 count([X|T], Result) :-
     count([X|T], 0, Result).
@@ -234,3 +238,37 @@ maxLengthList([H|T], CurMax, Result) :-
 maxLengthList([_|T], CurMax, Result) :-
     maxLengthList(T, CurMax, Result), !.
 maxLengthList([], Result, Result) :- !.
+
+
+% --------- 2.2 ---------
+
+% Дан файл. Определить, сколько в файле строк, не содержащих пробелы.
+
+task2_2 :-
+    see('/Users/snowlukin/Desktop/PrologLabs/2_2.txt'),
+    readStringList(StringsList),
+    seen,
+    countNoSpacesStrings(StringsList, Count),
+    write(Count),!.
+
+countCharacter(Str, Char, Result) :-
+    char_code(Char, CharCode),
+    countCharacter(Str, CharCode, 0, Result).
+countCharacter([S|T], Char, Count, Result) :-
+    S = Char,
+    NewCount is Count + 1,
+    countCharacter(T, Char, NewCount, Result),!.
+countCharacter([_|T], Char, Count, Result) :-
+    countCharacter(T, Char, Count, Result), !.
+countCharacter([], _, Result, Result) :- !.
+
+countNoSpacesStrings(StringsList, Result) :-
+    countNoSpacesStrings(StringsList, 0, Result),!.
+countNoSpacesStrings([H|T], Count, Result) :-
+    countCharacter(H, " ", SpaceCount),
+    SpaceCount is 0,
+    NewCount is Count + 1,
+    countNoSpacesStrings(T, NewCount, Result),!.
+countNoSpacesStrings([_|T], Count, Result) :-
+    countNoSpacesStrings(T, Count, Result),!.
+countNoSpacesStrings([], Result, Result) :- !.
