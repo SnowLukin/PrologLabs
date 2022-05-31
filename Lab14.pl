@@ -374,3 +374,34 @@ writeNoRepeatingWordsStrings([H|T], RepWords) :-
 writeNoRepeatingWordsStrings([_|T], RepWords) :-
     writeNoRepeatingWordsStrings(T, RepWords), !.
 writeNoRepeatingWordsStrings([], _) :- !.
+
+
+% --------- 3.2 ---------
+
+% Дана строка, состоящая из символов латиницы. Необходимо проверить,
+% упорядочены ли строчные символы этой строки по возрастанию.
+
+/*
+    Example:
+        ?- task3_2.
+        |: abcdef
+        Sorted
+        true.
+
+        ?- task3_2.
+        |: something
+        Not Sorted
+        true.
+*/
+
+task3_2 :-
+    readString(String, _),
+    string_to_list(String, CharList),
+    isSortedUp(CharList).
+
+isSortedUp([H|T]):- isSortedUp(T, H), !.
+isSortedUp([], _):- writeln("Sorted").
+isSortedUp([H|T], Previous):-
+    H > Previous,
+    isSortedUp(T, H);
+    writeln("Not Sorted").
