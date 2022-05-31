@@ -331,3 +331,46 @@ stringsListToString([H|T], List, Result) :-
     appendString(List, StrWords, NewList),
     stringsListToString(T, NewList, Result), !.
 stringsListToString([], Result, Result) :- !.
+
+
+% --------- 2.5 ---------
+
+% Дан файл, вывести в отдельный файл строки, состоящие из слов, не
+% повторяющихся в исходном файле.
+
+task2_5 :-
+    see('/Users/snowlukin/Desktop/PrologLabs/2_5_READ.txt'),
+    readStringList(StrList),
+    seen,
+    stringsListToString(StrList, Words),
+    repeatingWords(Words, RepWords),
+    tell('/Users/snowlukin/Desktop/PrologLabs/2_5_WRITE.txt'),
+    writeNoRepeatingWordsStrings(StrList, RepWords),
+    told.
+
+inList([X|_], X).
+inList([_|T] ,X) :- inList(T, X).
+
+containsList(List, [H|_]) :- inList(List, H), !.
+containsList(List, [_|T]) :- containsList(List, T).
+
+repeatingWords(Words, Result) :-
+    repeatingWords(Words, [], [], Result).
+repeatingWords([H|T], List, RepList, Result) :-
+    inList(List, H),
+    appendString(List, [H], NewList),
+    appendString(RepList, [H], NewRepList),
+    repeatingWords(T, NewList, NewRepList, Result),!.
+repeatingWords([H|T], List, RepList, Result) :-
+    appendString(List, [H], NewList),
+    repeatingWords(T, NewList, RepList, Result),!.
+repeatingWords([], _, Result, Result) :- !.
+
+writeNoRepeatingWordsStrings([H|T], RepWords) :-
+    splitString(H, " ", Words),
+    not(containsList(Words, RepWords)),
+    writeString(H), nl,
+    writeNoRepeatingWordsStrings(T, RepWords), !.
+writeNoRepeatingWordsStrings([_|T], RepWords) :-
+    writeNoRepeatingWordsStrings(T, RepWords), !.
+writeNoRepeatingWordsStrings([], _) :- !.
