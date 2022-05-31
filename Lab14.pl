@@ -396,12 +396,35 @@ writeNoRepeatingWordsStrings([], _) :- !.
 
 task3_2 :-
     readString(String, _),
-    string_to_list(String, CharList),
-    isSortedUp(CharList).
+    string_to_list(String, List),
+    isSortedUp(List).
 
-isSortedUp([H|T]):- isSortedUp(T, H), !.
-isSortedUp([], _):- writeln("Sorted").
-isSortedUp([H|T], Previous):-
+isSortedUp([H|T]) :- isSortedUp(T, H), !.
+isSortedUp([], _) :- writeln("Sorted").
+isSortedUp([H|T], Previous) :-
     H > Previous,
     isSortedUp(T, H);
     writeln("Not Sorted").
+
+
+% --------- 3.10 ---------
+
+% Дана строка. Необходимо подсчитать количество букв "А" в этой
+% строке.
+
+/*
+    Example:
+        ?- task3_10.
+        |: sbabsA
+        2
+        true.
+*/
+
+isA(Char) :- 97 is Char; 65 is Char, !.
+
+task3_10 :-
+    readString(String, _),
+    string_to_list(String, List),
+    include(isA, List, NewList),
+    length(NewList, Length),
+    writeln(Length), !.
