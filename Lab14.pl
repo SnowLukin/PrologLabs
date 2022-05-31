@@ -307,3 +307,27 @@ writeStringMoreA([H|T], Avg) :-
     writeStringMoreA(T, Avg),!.
 writeStringMoreA([_|T], Avg) :- writeStringMoreA(T, Avg), !.
 writeStringMoreA([], _) :- !.
+
+
+% --------- 2.4 ---------
+
+% Дан файл, вывести самое частое слово.
+
+task2_4 :-
+    see('/Users/snowlukin/Desktop/PrologLabs/2_4.txt'),
+    readStringList(StringList),
+    seen,
+    stringsListToString(StringList, BigString),
+    mostCommonWordList(BigString, Word),
+    writeString(Word).
+
+mostCommonWordList(Words, Result) :-
+    mostCommonWord(Words, Words, 0, [], Result).
+
+stringsListToString(StrList, Result) :-
+    stringsListToString(StrList, [], Result).
+stringsListToString([H|T], List, Result) :-
+    splitString(H, " ", StrWords),
+    appendString(List, StrWords, NewList),
+    stringsListToString(T, NewList, Result), !.
+stringsListToString([], Result, Result) :- !.
