@@ -272,3 +272,38 @@ countNoSpacesStrings([H|T], Count, Result) :-
 countNoSpacesStrings([_|T], Count, Result) :-
     countNoSpacesStrings(T, Count, Result),!.
 countNoSpacesStrings([], Result, Result) :- !.
+
+
+% --------- 2.3 ---------
+
+% Дан файл, найти и вывести на экран только те строки, в которых букв
+% А больше, чем в среднем на строку.
+
+task2_3 :-
+    see('/Users/snowlukin/Desktop/PrologLabs/2_3.txt'),
+    readStringList(StringsList),
+    seen,
+    count(StringsList, Len),
+    countCharacterList(StringsList, "a", Count1),
+    countCharacterList(StringsList, "A", Count2),
+    Count is Count1 + Count2,
+    Avg is Count / Len,
+    writeStringMoreA(StringsList, Avg).
+
+countCharacterList(List, Char, Result) :-
+    countCharacterList(List, Char, 0, Result),!.
+countCharacterList([H|T], Char, Count, Result) :-
+    countCharacter(H, Char, Count1),
+    NewCount is Count + Count1,
+    countCharacterList(T, Char, NewCount, Result),!.
+countCharacterList([], _, Result, Result) :- !.
+
+writeStringMoreA([H|T], Avg) :-
+    countCharacter(H, "a", Count1),
+    countCharacter(H, "A", Count2),
+    Count is Count1 + Count2,
+    Count > Avg,
+    writeString(H), nl,
+    writeStringMoreA(T, Avg),!.
+writeStringMoreA([_|T], Avg) :- writeStringMoreA(T, Avg), !.
+writeStringMoreA([], _) :- !.
