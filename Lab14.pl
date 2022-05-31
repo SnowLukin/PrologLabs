@@ -428,3 +428,39 @@ task3_10 :-
     include(isA, List, NewList),
     length(NewList, Length),
     writeln(Length), !.
+
+
+% --------- 3.17 ---------
+
+% Дана строка в которой записан путь к файлу. Необходимо найти имя
+% файла без расширения.
+
+% "/" - 47
+% "." - 46
+% "/Users/snowlukin/Desktop/PrologLabs/file_name.txt"
+
+task3_17 :-
+    % readString(String, _),
+    String = "/Users/snowlukin/Desktop/PrologLabs/file_name.txt",
+    atom_chars(String, CharList),
+    atom_codes(String, CodeList),
+    reverse(CodeList, ReversedCodeList),
+    nth0(SlashIndex, ReversedCodeList, 47),
+    length(CodeList, CodeListLength),
+    RealSlashIndex is CodeListLength - SlashIndex,
+    split(RealSlashIndex, CharList, _, AfterSlashList),
+    atomic_list_concat(AfterSlashList, '', AfterSlashAtom),
+    atom_string(AfterSlashAtom, AfterSlashString),
+    atom_codes(AfterSlashString, AfterSlashCodeList),
+    nth0(DotIndex, AfterSlashCodeList, 46),
+    split(DotIndex, AfterSlashList, BeforeDotList, _),
+    atomic_list_concat(BeforeDotList, '', BeforeDotAtom),
+    atom_string(BeforeDotAtom, BeforeDotString),
+    writeln(BeforeDotString), !.
+    
+split(Index, List, Left, Right) :-
+   length(Left,Index),
+   append(Left,Right,List), !.
+    
+
+    
