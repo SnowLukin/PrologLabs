@@ -463,4 +463,147 @@ split(Index, List, Left, Right) :-
    append(Left,Right,List), !.
     
 
-    
+% --------- 6 ---------
+
+/*
+    Результат записывать в файл.
+    Дано множество. Построить все размещения с повторениями по k
+    элементов.
+    Дано множество. Построить все перестановки.
+    Дано множество. Построить все размещения по k элементов.
+    Дано множество. Построить все подмножества.
+    Дано множество. Построить все сочетания по k элементов.
+    Дано множество. Построить все сочетания с повторениями.
+*/
+
+/*
+    Example:
+        ?- task6.
+        |: 5.
+        |: a.
+        |: b.
+        |: c.
+        |: d.
+        |: e.
+        |: 3.
+
+        true.
+*/
+
+task6 :-
+    read(N),
+    readList(N, List),
+    read(K),
+    tell('/Users/snowlukin/Desktop/PrologLabs/6.txt'),
+    write(List), nl, write(" K = "), write(K), nl, nl, nl, nl,
+    write("Размещения с повторениями из N по K: "), nl, nl,
+    aRepWrite(List, K), nl, nl, nl,
+    write("Перестановки из N: "), nl, nl,
+    pWrite(List), nl, nl, nl,
+    write("Размещения из N по K: "), nl, nl,
+    aWrite(List, K), nl, nl, nl,
+    write("Подмножества: "), nl, nl,
+    subSetWrite(List), nl, nl, nl,
+    write("Сочетания из N по K: "), nl, nl,
+    cWrite(List, K), nl, nl, nl,
+    write("Сочетания с повторениями из N по K: "), nl, nl,
+    cRepWrite(List, K), nl, nl, nl,
+    told.
+
+readList(0, []) :- !.
+readList(I, [X|T]) :- read(X), I1 is I - 1, readList(I1, T).
+
+% 6.1 - Размещения из N по K с повторениями
+
+aRepWrite(List, K) :-
+    not(aRepWriteInternal(List, K)).
+aRepWriteInternal(List, K) :-
+    aRep(List, K, A),
+    write(A), nl, fail.
+aRep(List, K, Ans) :-
+    aRep(List, K, [], Ans).
+aRep(List, K, CurList, Ans) :-
+    K > 0,
+    inList(List, X),
+    NewK is K - 1,
+    aRep(List, NewK, [X|CurList], Ans).
+aRep(_, 0, Ans, Ans) :- !.
+
+
+
+% 6.2 Перестановки из N
+
+pWrite(List) :-
+    count(List, K),
+    aWrite(List, K).
+p(List, Ans) :-
+    count(List, K),
+    a(List, K, Ans).
+
+
+% 6.3 Размещения из N по K
+
+inListNoRep([H|T],H,T).
+inListNoRep([H|T],Elem,[H|Tail]):-inListNoRep(T,Elem,Tail).
+
+aWrite(List, K) :-
+    not(aWriteInternal(List, K)).
+aWriteInternal(List, K) :-
+    a(List, K, A),
+    write(A), nl, fail.
+
+a(List, K, Ans) :-
+    a(List, K, [], Ans).
+a(List, K, CurPerm, Ans) :-
+    K > 0,
+    inListNoRep(List, X, NewList),
+    NewK is K - 1,
+    a(NewList, NewK, [X|CurPerm], Ans).
+a(_, 0, Ans, Ans) :- !.
+
+
+% 6.4 Подмножества
+
+subSetWrite(List) :-
+    not(subSetWriteInternal(List)).
+subSetWriteInternal(List) :-
+    subSet(List, SubSet),
+    write(SubSet), nl, fail.
+
+subSet([Elem|SetTail], [Elem|SubSetTail]) :-
+    subSet(SetTail, SubSetTail).
+subSet([_|SetTail], SubSet) :-
+    subSet(SetTail, SubSet).
+subSet([], []).
+
+% 6.5 Сочетания из N по K
+
+cWrite(List, K) :-
+    not(cWriteInternal(List, K)).
+cWriteInternal(List, K) :-
+    c(List, K, C),
+    write(C), nl, fail.
+
+c(_, 0, []) :- !.
+c([Elem|SetTail], K, [Elem|SubSetTail]) :-
+    NewK is K-1,
+    c(SetTail, NewK, SubSetTail).
+c([_|SetTail], K, SubSet) :-
+    c(SetTail, K, SubSet).
+
+
+
+% 6.6 Сочетания с повторениями из N по K
+
+cRepWrite(List, K) :-
+    not(cRepWriteInternal(List, K)).
+cRepWriteInternal(List, K) :-
+    cRep(List, K, C),
+    write(C), nl, fail.
+
+cRep(_, 0, []) :- !.
+cRep([Elem|SetTail], K, [Elem|SubSetTail]) :-
+    NewK is K-1,
+    cRep([Elem|SetTail], NewK, SubSetTail).
+cRep([_|SetTail], K, SubSet) :-
+    cRep(SetTail, K, SubSet).
