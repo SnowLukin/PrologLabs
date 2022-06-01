@@ -135,48 +135,36 @@ mostCommonWord(_, [], _, Result, Result) :-!.
 
 /*
     Example:
-        ?- task1_4.
-        |: somebody
-        som ody
+        ?- task1_4("somebody").
+        som
+        ody
         true.
 
-        ?- task1_4.
-        |: some
+        ?- task1_4("some").
         ssss
         true.
 */
 
-task1_4 :- readString(Str, N), task1_4(Str, N).
-task1_4(Str, Lenght) :-
-    Lenght > 5,
-    subString(Str, 0, 3, First3),
-    L3 is Lenght - 3,
-    subString(Str, L3, Lenght, Last3),
-    writeString(First3),
-    write(" "),
-    writeString(Last3),!.
-task1_4([H|_], N) :- writeStringNTimes([H], N).
+task1_4(String) :-
+    atom_chars(String, List),
+    length(List, Length),
+    Length > 5,
+    split(3, List, First3, _),
+    Last3Index is Length - 3,
+    split(Last3Index, List, _, Last3),
+    atomic_list_concat(First3, '', First3Atom),
+    atom_string(First3Atom, First3String),
+    atomic_list_concat(Last3, '', Last3Atom),
+    atom_string(Last3Atom, Last3String),
+    writeln(First3String), writeln(Last3String);
+    atom_chars(String, [H|Tail]),
+    length(Tail, SubLength),
+    Length is SubLength + 1,
+    writeStringNTimes1(H, Length), !.
 
-subString([H|T], Start, End, Result) :-
-    subString([H|T], Start, End, 0, [], Result).
-
-subString([H|T], Start, End, I, List, Result) :-
-    I >= Start, I < End,
-    appendString(List, [H], NewList),
-    NewI is I + 1,
-    subString(T, Start, End, NewI, NewList, Result),!.
-
-subString([_|T], Start, End, I, List, Result) :-
-    NewI is I + 1,
-    subString(T, Start, End, NewI, List, Result),!.
-
-subString([], _, _, _, Result, Result) :- !.
-
-writeStringNTimes(_, 0) :- !.
-writeStringNTimes(Str, N) :-
-    writeString(Str),
-    NewN is N - 1,
-    writeStringNTimes(Str, NewN),!.
+writeStringNTimes1(_, 0) :- !.
+writeStringNTimes1(Str, N) :-
+    write(Str), NewN is N - 1, writeStringNTimes1(Str, NewN).
 
 
 % --------- 1.5 ---------
