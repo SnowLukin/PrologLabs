@@ -218,15 +218,18 @@ indexesCharacter([], _, _, Result, Result) :- !.
 task2_1 :-
     see('/Users/snowlukin/Desktop/PrologLabs/2_1.txt'),
     readStringList(StringsList), seen,
-    maxLengthList(StringsList, MaxLen),
-    write(MaxLen),!.
+    maxLengthList(StringsList, MaxLength),
+    write(MaxLength), !.
 
-count([X|T], Result) :-
-    count([X|T], 0, Result).
-count([_|T], Count, Result) :-
-    NewCount is Count + 1,
-    count(T, NewCount, Result), !.
-count([], Result, Result) :- !.
+maxLengthList([H|T], Result) :-
+    length(H, Length),
+    maxLengthList(T, Length, Result), !.
+maxLengthList([], Result, Result).
+maxLengthList([H|T], Max, Result) :-
+    length(H, Length),
+    Max < Length,
+    maxLengthList(T, Length, Result);
+    maxLengthList(T, Max, Result).
 
 readStringList(List) :-
     readString(A,_,Flag),
@@ -238,16 +241,6 @@ readStringList(Cur_list,List,0) :-
     readStringList(C_l,List,Flag);
     readStringList(Cur_list,List,Flag)),!.
 
-maxLengthList(List, Result) :-
-    maxLengthList(List, 0, Result).
-maxLengthList([H|T], CurMax, Result) :-
-    count(H, NewMax),
-    NewMax > CurMax,
-    maxLengthList(T, NewMax, Result), !.
-maxLengthList([_|T], CurMax, Result) :-
-    maxLengthList(T, CurMax, Result), !.
-maxLengthList([], Result, Result) :- !.
-
 
 % --------- 2.2 ---------
 
@@ -258,8 +251,7 @@ task2_2 :-
     readStringList(StringsList),
     seen,
     writeln(StringsList),
-    testSub(StringsList, Count),
-    %countNoSpacesStrings(StringsList, Count),
+    countNoSpacesStrings(StringsList, Count),
     write(Count), !.
 
 isSpace1(Char):-
