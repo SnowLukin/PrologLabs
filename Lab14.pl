@@ -257,30 +257,23 @@ task2_2 :-
     see('/Users/snowlukin/Desktop/PrologLabs/2_2.txt'),
     readStringList(StringsList),
     seen,
-    countNoSpacesStrings(StringsList, Count),
-    write(Count),!.
+    writeln(StringsList),
+    testSub(StringsList, Count),
+    %countNoSpacesStrings(StringsList, Count),
+    write(Count), !.
 
-countCharacter(Str, Char, Result) :-
-    char_code(Char, CharCode),
-    countCharacter(Str, CharCode, 0, Result).
-countCharacter([S|T], Char, Count, Result) :-
-    S = Char,
-    NewCount is Count + 1,
-    countCharacter(T, Char, NewCount, Result),!.
-countCharacter([_|T], Char, Count, Result) :-
-    countCharacter(T, Char, Count, Result), !.
-countCharacter([], _, Result, Result) :- !.
+isSpace1(Char):-
+    32 is Char, !.
 
-countNoSpacesStrings(StringsList, Result) :-
-    countNoSpacesStrings(StringsList, 0, Result),!.
+countNoSpacesStrings(List, Result) :- testSub(List, 0, Result), !.
+countNoSpacesStrings([], Result, Result).
 countNoSpacesStrings([H|T], Count, Result) :-
-    countCharacter(H, " ", SpaceCount),
-    SpaceCount is 0,
+    include(isSpace1, H, FilteredList),
+    length(FilteredList, Length),
+    Length is 0,
     NewCount is Count + 1,
-    countNoSpacesStrings(T, NewCount, Result),!.
-countNoSpacesStrings([_|T], Count, Result) :-
-    countNoSpacesStrings(T, Count, Result),!.
-countNoSpacesStrings([], Result, Result) :- !.
+    countNoSpacesStrings(T, NewCount, Result);
+    countNoSpacesStrings(T, Count, Result).
 
 
 % --------- 2.3 ---------
@@ -720,4 +713,50 @@ task9Sub :-
     valueByIndex(Word, Pos2, Char2),
     valueByIndex(Word, Pos3, Char3),
     
+    write(Word), nl, fail.
+
+
+% --------- 10 ---------
+
+% Дано множество {a,b,c,d,e,f}. Построить все слова длины 6, в
+% которых ровно 2 буквы повторяются 2 раза, остальные буквы не
+% повторяются. Вывод в файл.
+
+task10 :-
+    tell('/Users/snowlukin/Desktop/PrologLabs/10.txt'),
+    not(task10Sub),
+    told.
+
+task10Sub :-
+
+    Positions = [0,1,2,3,4,5],
+    Word = [_, _, _, _, _, _],
+
+    c(Positions, 2, [Pos1Rep2Char1, Pos2Rep2Char1]),
+    
+    inListNoRep(Positions, Pos1Rep2Char1, PositionsNoRep2Char1),
+    inListNoRep(PositionsNoRep2Char1, Pos2Rep2Char1, Positions2NoRep2Char1),
+
+    c(Positions2NoRep2Char1, 2, [Pos1Rep2Char2, Pos2Rep2Char2]),
+
+    inListNoRep(Positions2NoRep2Char1, Pos1Rep2Char2, PositionsNoRep2Char2),
+    inListNoRep(PositionsNoRep2Char2, Pos2Rep2Char2, [Pos1, Pos2]),
+
+    Alphabet = [a,b,c,d,e,f],
+
+    c(Alphabet, 2, [Rep2Char1, Rep2Char2]),
+
+    inListNoRep(Alphabet, Rep2Char1, AlphabetNoRep2Char1),
+    inListNoRep(AlphabetNoRep2Char1, Rep2Char2, Alphabet2NoRep2Char2),
+
+    valueByIndex(Word, Pos1Rep2Char1, Rep2Char1),
+    valueByIndex(Word, Pos2Rep2Char1, Rep2Char1),
+    valueByIndex(Word, Pos1Rep2Char2, Rep2Char2),
+    valueByIndex(Word, Pos2Rep2Char2, Rep2Char2),
+
+    a(Alphabet2NoRep2Char2, 2, [Char1, Char2]),
+
+    valueByIndex(Word, Pos1, Char1),
+    valueByIndex(Word, Pos2, Char2),
+
     write(Word), nl, fail.
