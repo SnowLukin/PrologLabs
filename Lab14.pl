@@ -683,3 +683,41 @@ task8Sub :-
     valueByIndex(Word, Pos3, Char3),
 
     write(Word), nl, fail.
+
+
+% --------- 9 ---------
+
+% Дано множество {a,b,c,d,e,f}. Построить все слова длины 5, в
+% которых ровно одна буква повторяется 2 раза, остальные буквы не
+% повторяются. Вывод в файл.
+
+
+task9 :-
+    tell('/Users/snowlukin/Desktop/PrologLabs/9.txt'),
+    not(task9Sub),
+    told.
+
+task9Sub :-
+    
+    Positions = [0, 1, 2, 3, 4],
+    Word = [_, _, _, _, _],
+    
+    c(Positions, 2, [PosRep2Char1, PosRep2Char2]),
+    
+    Alphabet = [a,b,c,d,e,f],
+    c(Alphabet, 1, [Rep2Char]),
+    
+    valueByIndex(Word, PosRep2Char1, Rep2Char),
+    valueByIndex(Word, PosRep2Char2, Rep2Char),
+    
+    inListNoRep(Positions, PosRep2Char1, PositionsNoRep2Char),
+    inListNoRep(PositionsNoRep2Char, PosRep2Char2, [Pos1, Pos2, Pos3]),
+    inListNoRep(Alphabet, Rep2Char, AlphabetNoRep2Char),
+    
+    a(AlphabetNoRep2Char, 3, [Char1, Char2, Char3]),
+    
+    valueByIndex(Word, Pos1, Char1),
+    valueByIndex(Word, Pos2, Char2),
+    valueByIndex(Word, Pos3, Char3),
+    
+    write(Word), nl, fail.
