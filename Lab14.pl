@@ -26,6 +26,15 @@ appendString([X|T],Y,[X|T1]) :- appendString(T,Y,T1).
 writeString([]):-!.
 writeString([H|T]):-put(H),writeString(T).
 
+valueByIndex([H|T], Index, Result) :-
+    valueByIndex([H|T], 0, Index, Result),!.
+    
+valueByIndex([Result|_], Index, Index, Result).
+
+valueByIndex([_|T], CurIndex, Index, Result) :-
+    NewCurIndex is CurIndex + 1,
+    valueByIndex(T, NewCurIndex, Index, Result).
+
 % --------- 1.1 ---------
 
 % Дана строка. Вывести ее три раза через запятую и показать количество символов в ней.
@@ -607,3 +616,38 @@ cRep([Elem|SetTail], K, [Elem|SubSetTail]) :-
     cRep([Elem|SetTail], NewK, SubSetTail).
 cRep([_|SetTail], K, SubSet) :-
     cRep(SetTail, K, SubSet).
+
+
+
+% --------- 7 ---------
+
+% Дано множество {a,b,c,d,e,f}. Построить все слова длины 5, в
+% которых ровно две буквы a. Вывод в файл.
+
+task7 :-
+    tell('/Users/snowlukin/Desktop/PrologLabs/7.txt'),
+    not(task7Sub),
+    told.
+
+task7Sub :-
+
+    Positions = [0, 1, 2, 3, 4],
+    Word = [_, _, _, _, _],
+    
+    % Pos1, Pod2 будут всевозможными индексами на которые будем ставить символ "a"
+    c(Positions, 2, [PosA1, PosA2]),
+    
+    valueByIndex(Word, PosA1, a),
+    valueByIndex(Word, PosA2, a),
+    
+    % Индексы свободных позиций
+    inListNoRep(Positions, PosA1, PositionsNoA),
+    inListNoRep(PositionsNoA, PosA2, [Pos1, Pos2, Pos3]),
+
+    aRep([b,c,d,e,f], 3, [Char1, Char2, Char3]),
+
+    valueByIndex(Word, Pos1, Char1),
+    valueByIndex(Word, Pos2, Char2),
+    valueByIndex(Word, Pos3, Char3),
+
+    write(Word), nl, fail.
