@@ -13,12 +13,41 @@ readString(Str,N, Flag):-
 
 readString(-1,Str,N,Str,N,1):-!.
 readString(10,Str,N,Str,N,0):-!.
-
 readString(Char,NowStr,Count,Str,N, Flag):-
     NewCount is Count+1,
     appendString(NowStr,[Char],NewNowStr),
     get0(NewChar),
     readString(NewChar,NewNowStr,NewCount,Str,N, Flag).
+
+count([X|T], Result) :-
+     count([X|T], 0, Result).
+count([_|T], Count, Result) :-
+     NewCount is Count + 1,
+     count(T, NewCount, Result), !.
+count([], Result, Result) :- !.
+
+countCharacter(Str, Char, Result) :-
+     char_code(Char, CharCode),
+     countCharacter(Str, CharCode, 0, Result).
+ countCharacter([S|T], Char, Count, Result) :-
+     S = Char,
+     NewCount is Count + 1,
+     countCharacter(T, Char, NewCount, Result),!.
+ countCharacter([_|T], Char, Count, Result) :-
+     countCharacter(T, Char, Count, Result), !.
+ countCharacter([], _, Result, Result) :- !.
+
+subString([H|T], Start, End, Result) :-
+     subString([H|T], Start, End, 0, [], Result).
+subString([H|T], Start, End, I, List, Result) :-
+     I >= Start, I < End,
+     appendString(List, [H], NewList),
+     NewI is I + 1,
+     subString(T, Start, End, NewI, NewList, Result),!.
+subString([_|T], Start, End, I, List, Result) :-
+     NewI is I + 1,
+     subString(T, Start, End, NewI, List, Result),!.
+subString([], _, _, _, Result, Result) :- !.
 
 appendString([],X,X).
 appendString([X|T],Y,[X|T1]) :- appendString(T,Y,T1).
