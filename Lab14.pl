@@ -68,7 +68,6 @@ isSpace(Char):-
     32 is Char, !.
 
 task1_2(String):-
-    %atom_chars(String, CharList),
     atom_codes(String, CodeList),
     include(isSpace, CodeList, FilteredList),
     length(FilteredList, Length),
@@ -256,7 +255,7 @@ task2_2 :-
     countNoSpacesStrings(StringsList, Count),
     write(Count), !.
 
-countNoSpacesStrings(List, Result) :- testSub(List, 0, Result), !.
+countNoSpacesStrings(List, Result) :- countNoSpacesStrings(List, 0, Result), !.
 countNoSpacesStrings([], Result, Result).
 countNoSpacesStrings([H|T], Count, Result) :-
     include(isSpace, H, FilteredList),
