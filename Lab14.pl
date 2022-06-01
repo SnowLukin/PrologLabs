@@ -40,15 +40,17 @@ valueByIndex([_|T], CurIndex, Index, Result) :-
 % Дана строка. Вывести ее три раза через запятую и показать количество символов в ней.
 /*
     Example:
-        ?- task1_1(hello).
-        h e l l o
-        Lenght: 5
+        ?- task1_1("something").
+        something, something, something
+        Lenght: 9
         true.
 */
 
 task1_1(String):-
+    write(String), write(", "),
+    write(String), write(", "),
+    writeln(String),
     atom_chars(String, CharList),
-    writeList(CharList),
     length(CharList, Length),
     write("Lenght: "), writeln(Length).
 
@@ -63,12 +65,12 @@ task1_1(String):-
 */
 
 isSpace(Char):-
-    atom_string(Char, NewChar),
-    32 is NewChar, !.
+    32 is Char, !.
 
 task1_2(String):-
-    atom_chars(String, CharList),
-    include(isSpace, CharList, FilteredList),
+    %atom_chars(String, CharList),
+    atom_codes(String, CodeList),
+    include(isSpace, CodeList, FilteredList),
     length(FilteredList, Length),
     AmountOfWords is Length + 1,
     write("Amount of words: "), writeln(AmountOfWords).
@@ -254,13 +256,10 @@ task2_2 :-
     countNoSpacesStrings(StringsList, Count),
     write(Count), !.
 
-isSpace1(Char):-
-    32 is Char, !.
-
 countNoSpacesStrings(List, Result) :- testSub(List, 0, Result), !.
 countNoSpacesStrings([], Result, Result).
 countNoSpacesStrings([H|T], Count, Result) :-
-    include(isSpace1, H, FilteredList),
+    include(isSpace, H, FilteredList),
     length(FilteredList, Length),
     Length is 0,
     NewCount is Count + 1,
