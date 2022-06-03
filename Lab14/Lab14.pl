@@ -79,6 +79,7 @@ task1_1(String):-
     write(String), write(", "),
     write(String), write(", "),
     writeln(String),
+    % writeStringNTimes1(String, 3),
     atom_chars(String, CharList),
     length(CharList, Length),
     write("Lenght: "), writeln(Length).
